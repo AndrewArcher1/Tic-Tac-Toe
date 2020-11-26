@@ -5,15 +5,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[]){
+int main( int argc, char* argv[]){
     
-    int i;
+    int i=0;
+    int total;
+
     init_boards();
     init_board(START_BOARD);
     join_graph(START_BOARD);
 
-    for(i=1;i<argc; i++){
-    print_node(htable[atoi(argv[i])]);
+    for(i=0;i<HSIZE;i++){
+        if(htable[i].init == 1){
+            total++;
+        }
     }
+    printf("%d\n",total);
+
     return(0);
 }

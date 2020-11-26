@@ -71,7 +71,7 @@ char turn (Board board){
         return 'X';
     }
 
-    return 'Y';
+    return 'O';
 }
 
 void init_board(Board board){
@@ -79,7 +79,8 @@ void init_board(Board board){
 
    int hash =  board_hash(board);
    
-   htable[hash].init =1;
+   htable[hash].init = 1;
+   strcpy(htable[hash].board, board);
    htable[hash].turn = turn(board);
    htable[hash].depth = depth(board);
    htable[hash].winner = winner(board);
@@ -95,27 +96,30 @@ void join_graph(Board board){
     int hashbuff;
 
     Board boardBuff;
-
+    hash = board_hash(board);
     for(j=0; j<9; j++){
+        
         if(isalpha(board[pos2idx[j]])){
-            hash = board_hash(board);
-
+            
             htable[hash].move[j] = -1;
-
+            
         }else{
-             strcpy(boardBuff,board);
-
+            
+            strcpy(boardBuff,board);
+            
             boardBuff[pos2idx[j]] = turn(board);
-            printf("%s\n", boardBuff);
+            
             hashbuff = board_hash(boardBuff);
+            
+            htable[hash].move[j] = hashbuff;
 
             if(htable[hashbuff].init == 0){
+                
                 init_board(boardBuff);
-                htable[hash].move[j] = hashbuff;
-            }else{
-                htable[hash].move[j] = hashbuff;
+                join_graph(boardBuff);
+                
             }
-
+                
         }
 
     }
